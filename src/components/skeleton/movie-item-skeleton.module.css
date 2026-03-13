@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.cover_img {
+  height: 377px;
+  width: auto;
+  gap: 5px;
+  background-color: rgb(160, 160, 160);
+}
