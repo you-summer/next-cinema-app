@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
 import movies from "@/dummy.json";
+import { delay } from "@/util/delay";
 
 export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
