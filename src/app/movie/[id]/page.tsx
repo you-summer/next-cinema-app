@@ -7,6 +7,21 @@ export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 }
 
+function ReviewEditor() {
+  async function createReviewAction() {
+    "use server";
+    console.log("액션 우왕");
+  }
+
+  return (
+    <form>
+      <input />
+      <input />
+      <button>작성하기</button>
+    </form>
+  );
+}
+
 export default async function Page({
   params,
 }: {
@@ -56,6 +71,8 @@ export default async function Page({
           <div className={style.description}>{description}</div>
         </div>
       </div>
+
+      <ReviewEditor />
     </div>
   );
 }
