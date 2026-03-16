@@ -2,35 +2,17 @@ import { notFound } from "next/navigation";
 import style from "./page.module.css";
 import movies from "@/dummy.json";
 import { delay } from "@/util/delay";
+import ReviewEditor from "@/components/review-editor";
+import { ReviewData } from "@/types";
+import ReviewItem from "@/components/review-item";
 
 export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
 }
 
-function ReviewEditor() {
-  async function createReviewAction() {
-    "use server";
-    console.log("액션 우왕");
-  }
-
-  return (
-    <form>
-      <input />
-      <input />
-      <button>작성하기</button>
-    </form>
-  );
-}
-
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ id: string | string[] }>;
-}) {
-  const { id } = await params;
-
+async function MovieDetail({ movieId }: { movieId: string }) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/${id}`,
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/${movieId}`,
   );
   if (!response.ok) {
     if (response.status === 404) {
@@ -51,7 +33,7 @@ export default async function Page({
   } = movie;
 
   return (
-    <div className={style.container}>
+    <section>
       <div
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${posterImgUrl}')` }}
@@ -71,8 +53,43 @@ export default async function Page({
           <div className={style.description}>{description}</div>
         </div>
       </div>
+    </section>
+  );
+}
 
-      <ReviewEditor />
+async function ReviewList({ movieId }: { movieId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/movie/${movieId}`,
+    { next: { tags: [`review-${movieId}`] } },
+  );
+
+  if (!response.ok) {
+    throw new Error(`review list fetch failed : ${response.statusText}`);
+  }
+
+  const reviews: ReviewData[] = await response.json();
+
+  return (
+    <section>
+      {reviews.map((review) => {
+        return <ReviewItem key={`review-item-${review.id}`} {...review} />;
+      })}
+    </section>
+  );
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <div className={style.container}>
+      <MovieDetail movieId={id} />
+      <ReviewEditor movieId={id} />
+      <ReviewList movieId={id} />
     </div>
   );
 }
