@@ -5,6 +5,7 @@ import { delay } from "@/util/delay";
 import ReviewEditor from "@/components/review-editor";
 import { ReviewData } from "@/types";
 import ReviewItem from "@/components/review-item";
+import Image from "next/image";
 
 export function generateStaticParams() {
   return [{ id: "1" }, { id: "2" }, { id: "3" }];
@@ -38,7 +39,13 @@ async function MovieDetail({ movieId }: { movieId: string }) {
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${posterImgUrl}')` }}
       >
-        <img src={posterImgUrl} />
+        {/* <img src={posterImgUrl} /> */}
+        <Image
+          src={posterImgUrl}
+          width={240}
+          height={300}
+          alt={`영화 ${title}의 표지 이미지`}
+        />
       </div>
       <div className={style.info_container}>
         <div>

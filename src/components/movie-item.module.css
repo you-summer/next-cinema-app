@@ -1,4 +1,7 @@
 .container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3; /* 🔥 이거 한 줄로 해결 */
 }
 
 .container > img {
